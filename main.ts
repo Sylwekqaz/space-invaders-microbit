@@ -30,12 +30,16 @@ input.onButtonPressed(Button.B, function () {
         PlayerX += 1
     }
 })
+function onAlienDie () {
+    AlienSpawnTime = input.runningTime() + 1000
+}
 input.onLogoEvent(TouchButtonEvent.Touched, function () {
     BulletY = 3
     BulletX = PlayerX
     music.play(music.builtinPlayableSoundEffect(soundExpression.giggle), music.PlaybackMode.InBackground)
 })
 let BulletX = 0
+let AlienSpawnTime = 0
 let PlayerX = 0
 let BulletY = 0
 let AlienX = 0
@@ -43,6 +47,7 @@ let AlienHP = 3
 AlienX = 2
 BulletY = -1
 PlayerX = 2
+AlienSpawnTime = -1
 loops.everyInterval(1500, function () {
     // alien movement
     if (AlienX == -1) {
@@ -68,11 +73,17 @@ loops.everyInterval(200, function () {
                 // alien dies
                 if (AlienHP == 0) {
                     AlienX = -1
+                    onAlienDie()
                 }
             }
             BulletY = -1
         }
         BulletY += -1
+    }
+    if (AlienSpawnTime != -1 && input.runningTime() > AlienSpawnTime) {
+        AlienHP = 3
+        AlienX = 2
+        AlienSpawnTime = -1
     }
 })
 loops.everyInterval(100, function () {
